@@ -1,0 +1,60 @@
+stages:
+- stage: validate
+  jobs:
+  - job: validate
+    continueOnError: false
+    steps:
+    - task: TerraformInstaller@0
+      inputs:
+        terraformVersion: '0.12.3'
+
+    - task: TerraformTaskV2@2
+      displayName: Terraform init
+      inputs:
+        provider: 'aws'
+        command: 'init'
+        backendServiceAWS: 'us-east-1'
+        backendAWSBucketName: 'azure-dev2908'
+        backendAWSKey: 'main.tfstate'
+    - task: TerraformTaskV2@2
+      displayName: Terraform Validate
+      inputs:
+        provider: 'aws'
+        command: 'validate'
+
+- stage: deploy
+  jobs:
+  - deployment: deploy_terraform
+    continueOnError: false
+    environment: 'dev'
+    strategy:
+     runOnce:
+      deploy:
+       steps:
+          - checkout: self
+          - task: TerraformInstaller@0
+            inputs:
+              terraformVersion: '0.12.3'
+
+          - task: TerraformTaskV2@2
+            displayName: Terraform init
+            inputs:
+              provider: 'aws'
+              command: 'init'
+              backendServiceAWS: 'us-east-1'
+              backendAWSBucketName: 'azure-dev2908'
+              backendAWSKey: 'main.tfstate'
+
+          - task: TerraformTaskV2@2
+            displayName: Terraform plan
+            inputs:
+              provider: 'aws'
+              command: 'plan'
+              environmentServiceNameAWS: 'us-east-1'
+
+          - task: TerraformTaskV2@2
+            displayName: Terraform apply
+            inputs:
+              provider: 'aws'
+              command: 'apply'
+              environmentServiceNameAWS: 'us-east-1'
