@@ -6,18 +6,21 @@ steps:
      terraformVersion: '0.12.3'
  - task: TerraformTaskV2@2
    inputs:
-     provider: 'aws'
+     provider: 'azurerm'
      command: 'init'
-     backendServiceAWS: 'us-east-1'
-     backendAWSBucketName: 'new-bucket1230'
-     backendAWSKey: 'main.tfstate'
+     backendServiceArm: 'Azure for Students(0696d9e5-ea22-4caa-be0d-349c87843d62)'
+     backendAzureRmResourceGroupName: 'new-rg'
+     backendAzureRmStorageAccountName: 'newstorageaccount1230'
+     backendAzureRmContainerName: 'newcon'
+     backendAzureRmKey: 'main.tfstate'
+ 
  - task: TerraformTaskV2@2
    inputs:
-     provider: 'aws'
+     provider: 'azurerm'
      command: 'plan'
-     environmentServiceNameAWS: 'us-east-1'
+     environmentServiceNameAzureRM: 'Azure for Students(0696d9e5-ea22-4caa-be0d-349c87843d62)'
  - task: TerraformTaskV2@2
    inputs:
-     provider: 'aws'
+     provider: 'azurerm'
      command: 'apply'
-     environmentServiceNameAWS: 'us-east-1'
+     environmentServiceNameAzureRM: 'Azure for Students(0696d9e5-ea22-4caa-be0d-349c87843d62)'
