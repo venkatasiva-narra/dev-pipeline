@@ -1,15 +1,12 @@
 trigger:
 - main
-pool: MR Agent
+pool: Agent 007
 
 
 
 
 steps:
- - task: Bash@3
-   inputs:
-    filePath: '$(System.DefaultWorkingDirectory)'
-    arguments: 'echo "Hello World"'
+
  - task: TerraformInstaller@0
    inputs:
      terraformVersion: '0.12.3'
